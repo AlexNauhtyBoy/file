@@ -73,7 +73,7 @@ import Uploader from './uploader';
  *                           also can contain any additional data that will be saved and passed back
  * @property {string} file.url - [Required] image source URL
  */
-export default class ImageTool {
+export default class File {
   /**
    * Get Tool toolbox settings
    * icon - Tool icon's SVG
