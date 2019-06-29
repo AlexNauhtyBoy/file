@@ -145,65 +145,22 @@ export default class Ui {
    */
   fillImage(url) {
       console.log(url, 7777);
-    /**
-     * Check for a source extension to compose element correctly: video tag for mp4, img — for others
-     */
-    const tag = /\.mp4$/.test(url) ? 'VIDEO' : 'IMG';
 
-    const attributes = {
-      src: url
-    };
+      const code = url.match(/[[0-9]{10,25}]/);
 
-    /**
-     * We use eventName variable because IMG and VIDEO tags have different event to be called on source load
-     * - IMG: load
-     * - VIDEO: loadeddata
-     * @type {string}
-     */
-    let eventName = 'load';
+      const name = url.slice(code.index + code[0].length);
 
-    /**
-     * Update attributes and eventName if source is a mp4 video
-     */
-    if (tag === 'VIDEO') {
-      /**
-       * Add attributes for playing muted mp4 as a gif
-       * @type {boolean}
-       */
-      attributes.autoplay = true;
-      attributes.loop = true;
-      attributes.muted = true;
-      attributes.playsinline = true;
+      const reader = new FileReader();
 
-      /**
-       * Change event to be listened
-       * @type {string}
-       */
-      eventName = 'loadeddata';
-    }
-
-    /**
-     * Compose tag with defined attributes
-     * @type {Element}
-     */
-    // this.nodes.imageEl = make(tag, this.CSS.imageEl, attributes);
-    this.nodes.imageEl = `<div>123321</div>`;
-
-    /**
-     * Add load event listener
-     */
-    // this.nodes.imageEl.addEventListener(eventName, () => {
-    //   this.toggleStatus(Ui.status.FILLED);
-    //
-    //   /**
-    //    * Preloader does not exists on first rendering with presaved data
-    //    */
-    //   if (this.nodes.imagePreloader) {
-    //     this.nodes.imagePreloader.style.backgroundImage = '';
-    //   }
-    // });
-
-    this.nodes.imageContainer.appendChild(this.nodes.imageEl);
+    this.nodes.imageContainer.innerHTML = `
+        <a href="${url}" download="${name.replace(/\.[^/.]+$/, "")}">
+            <div class="uploade-tool__link uploade-tool__link--loading">
+              <div class="uploade-tool__fileName">
+                  ${buttonIcon}
+                  ${name}
+              </div>
+            </div>
+        </a>`
   }
 
   /**

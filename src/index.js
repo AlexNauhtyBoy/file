@@ -316,6 +316,7 @@ export default class File {
    * @param {UploadResponseFormat} response
    */
   onUpload(response) {
+    console.log(response);
     if (response.success && response.file) {
       this.image = response.file;
     } else {
