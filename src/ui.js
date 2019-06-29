@@ -155,8 +155,8 @@ export default class Ui {
 
     this.nodes.imageContainer.innerHTML = `
         <a href="${url}" download="${name.replace(/\.[^/.]+$/, "")}">
-            <div class="uploade-tool__link uploade-tool__link--loading">
-              <div class="uploade-tool__fileName">
+            <div class="upload-tool__link ">
+              <div class="upload-tool__fileName">
                   ${buttonIcon}
                   ${name}
               </div>
