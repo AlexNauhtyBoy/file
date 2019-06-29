@@ -102,7 +102,7 @@ export default class Ui {
   createFileButton() {
     const button = make('div', [ this.CSS.button ]);
 
-    button.innerHTML = this.config.buttonContent || `${buttonIcon} Select a File`;
+    button.innerHTML = this.config.buttonContent || `<div class="cdx-button__icon">${buttonIcon}</div> <div>Select a file</div>`;
 
     button.addEventListener('click', () => {
       this.onSelectFile();
