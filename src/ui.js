@@ -162,6 +162,8 @@ export default class Ui {
               </div>
             </div>
         </a>`
+
+    this.toggleStatus(Ui.status.FILLED);
   }
 
   /**
