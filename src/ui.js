@@ -58,11 +58,11 @@ export default class Ui {
       /**
        * Tool's classes
        */
-      wrapper: 'image-tool',
-      imageContainer: 'image-tool__image',
-      imagePreloader: 'image-tool__image-preloader',
-      imageEl: 'image-tool__image-picture',
-      caption: 'image-tool__caption'
+      wrapper: 'uploader-tool',
+      imageContainer: 'uploader-tool__image',
+      imagePreloader: 'uploader-tool__uploader-preloader',
+      imageEl: 'uploader-tool__uploader-picture',
+      caption: 'uploader-tool__caption'
     };
   };
 
