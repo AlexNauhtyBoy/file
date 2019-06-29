@@ -7,118 +7,118 @@ import buttonIcon from './svg/button-icon.svg';
  *  - apply tune view
  */
 export default class Ui {
-  /**
-   * @param {object} api - Editor.js API
-   * @param {ImageConfig} config - user config
-   * @param {function} onSelectFile - callback for clicks on Select file buttor
-   */
-  constructor({api, config, onSelectFile}) {
-    this.api = api;
-    this.config = config;
-    this.onSelectFile = onSelectFile;
-    this.nodes = {
-      wrapper: make('div', [this.CSS.baseClass, this.CSS.wrapper]),
-      imageContainer: make('div', [this.CSS.imageContainer]),
-      fileButton: this.createFileButton(),
-      imageEl: undefined,
-      imagePreloader: make('div', this.CSS.imagePreloader),
-      caption: make('div', [this.CSS.input, this.CSS.caption], {
-        contentEditable: true
-      })
+    /**
+     * @param {object} api - Editor.js API
+     * @param {ImageConfig} config - user config
+     * @param {function} onSelectFile - callback for clicks on Select file buttor
+     */
+    constructor({api, config, onSelectFile}) {
+        this.api = api;
+        this.config = config;
+        this.onSelectFile = onSelectFile;
+        this.nodes = {
+            wrapper: make('div', [this.CSS.baseClass, this.CSS.wrapper]),
+            imageContainer: make('div', [this.CSS.imageContainer]),
+            fileButton: this.createFileButton(),
+            imageEl: undefined,
+            imagePreloader: make('div', this.CSS.imagePreloader),
+            caption: make('div', [this.CSS.input, this.CSS.caption], {
+                contentEditable: true
+            })
+        };
+
+        /**
+         * Create base structure
+         *  <wrapper>
+         *    <image-container>
+         *      <image-preloader />
+         *    </image-container>
+         *    <caption />
+         *    <select-file-button />
+         *  </wrapper>
+         */
+        this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
+        this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
+        this.nodes.wrapper.appendChild(this.nodes.imageContainer);
+        // this.nodes.wrapper.appendChild(this.nodes.caption);
+        this.nodes.wrapper.appendChild(this.nodes.fileButton);
+    }
+
+    /**
+     * CSS classes
+     * @constructor
+     */
+    get CSS() {
+        return {
+            baseClass: this.api.styles.block,
+            loading: this.api.styles.loader,
+            input: this.api.styles.input,
+            button: this.api.styles.button,
+
+            /**
+             * Tool's classes
+             */
+            wrapper: 'uploader-tool',
+            imageContainer: 'image-tool__image',
+            imagePreloader: 'image-tool__image-preloader',
+            imageEl: 'image-tool__image-picture',
+            caption: 'image-tool__caption'
+        };
     };
 
     /**
-     * Create base structure
-     *  <wrapper>
-     *    <image-container>
-     *      <image-preloader />
-     *    </image-container>
-     *    <caption />
-     *    <select-file-button />
-     *  </wrapper>
+     * Ui statuses:
+     * - empty
+     * - uploading
+     * - filled
+     * @return {{EMPTY: string, UPLOADING: string, FILLED: string}}
      */
-    this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
-    this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
-    this.nodes.wrapper.appendChild(this.nodes.imageContainer);
-    // this.nodes.wrapper.appendChild(this.nodes.caption);
-    this.nodes.wrapper.appendChild(this.nodes.fileButton);
-  }
-
-  /**
-   * CSS classes
-   * @constructor
-   */
-  get CSS() {
-    return {
-      baseClass: this.api.styles.block,
-      loading: this.api.styles.loader,
-      input: this.api.styles.input,
-      button: this.api.styles.button,
-
-      /**
-       * Tool's classes
-       */
-      wrapper: 'image-tool',
-      imageContainer: 'image-tool__image',
-      imagePreloader: 'image-tool__image-preloader',
-      imageEl: 'image-tool__image-picture',
-      caption: 'image-tool__caption'
-    };
-  };
-
-  /**
-   * Ui statuses:
-   * - empty
-   * - uploading
-   * - filled
-   * @return {{EMPTY: string, UPLOADING: string, FILLED: string}}
-   */
-  static get status() {
-    return {
-      EMPTY: 'empty',
-      UPLOADING: 'loading',
-      FILLED: 'filled123'
-    };
-  }
-
-  /**
-   * @param {ImageToolData} toolData
-   * @return {HTMLDivElement}
-   */
-  render(toolData) {
-    if (!toolData.file || Object.keys(toolData.file).length === 0) {
-      this.toggleStatus(Ui.status.EMPTY);
-    } else {
-      this.toggleStatus(Ui.status.UPLOADING);
+    static get status() {
+        return {
+            EMPTY: 'empty',
+            UPLOADING: 'loading',
+            FILLED: 'filled'
+        };
     }
 
-    return this.nodes.wrapper;
-  }
+    /**
+     * @param {ImageToolData} toolData
+     * @return {HTMLDivElement}
+     */
+    render(toolData) {
+        if (!toolData.file || Object.keys(toolData.file).length === 0) {
+            this.toggleStatus(Ui.status.EMPTY);
+        } else {
+            this.toggleStatus(Ui.status.UPLOADING);
+        }
 
-  /**
-   * Creates upload-file button
-   * @return {Element}
-   */
-  createFileButton() {
-    const button = make('div', [this.CSS.button]);
+        return this.nodes.wrapper;
+    }
 
-    button.innerHTML = this.config.buttonContent || `<div class="cdx-button__icon">${buttonIcon}</div> <div>Select a file</div>`;
+    /**
+     * Creates upload-file button
+     * @return {Element}
+     */
+    createFileButton() {
+        const button = make('div', [this.CSS.button]);
 
-    button.addEventListener('click', () => {
-      this.onSelectFile();
-    });
+        button.innerHTML = this.config.buttonContent || `<div class="cdx-button__icon">${buttonIcon}</div> <div>Select a file</div>`;
 
-    return button;
-  }
+        button.addEventListener('click', () => {
+            this.onSelectFile();
+        });
 
-  /**
-   * Shows uploading preloader
-   * @param {string} src - preview source
-   */
-  showPreloader(src) {
-    const button = make('div', [this.CSS.button]);
+        return button;
+    }
 
-    this.nodes.imagePreloader.innerHTML = `
+    /**
+     * Shows uploading preloader
+     * @param {string} src - preview source
+     */
+    showPreloader(src) {
+        const button = make('div', [this.CSS.button]);
+
+        this.nodes.imagePreloader.innerHTML = `
         <div class="upload-tool__link upload-tool__link--loading">
         <div class="progressFill load"></div>
             <div class="upload-tool__fileName">
@@ -128,84 +128,86 @@ export default class Ui {
             <div class="upload-tool__fileSize">${this.formatBytes(src.size)}</div>
 
         </div>`;
-    this.toggleStatus(Ui.status.UPLOADING);
-  }
+         setTimeout(() => {
+             this.nodes.imagePreloader.classList.add('stop')
+         }, 1300)
+        this.toggleStatus(Ui.status.UPLOADING);
+    }
 
-  /**
-   * Hide uploading preloader
-   */
-  hidePreloader() {
-    this.nodes.imagePreloader.classList.add('stop')
-    setTimeout(() => {
-      this.nodes.imagePreloader.innerHTML = ``;
-    }, 100)
-    this.toggleStatus(Ui.status.EMPTY);
-  }
+    /**
+     * Hide uploading preloader
+     */
+    hidePreloader() {
+        this.nodes.imagePreloader.classList.remove('stop')
 
-  /**
-   * Shows an image
-   * @param {string} url
-   */
-  fillImage(url) {
-    const code = url.match(/[[0-9]{10,25}]/);
+        this.toggleStatus(Ui.status.EMPTY);
+    }
 
-    const name = url.slice(code.index + code[0].length);
+    /**
+     * Shows an image
+     * @param {string} url
+     */
+    fillImage(url) {
+        const code = url.match(/[[0-9]{10,25}]/);
 
-    const reader = new FileReader();
+        const name = url.slice(code.index + code[0].length);
 
-    this.nodes.imageContainer.innerHTML = `
-        <a href="${url}" download="${name.replace(/\.[^/.]+$/, "")}">
-            <div class="upload-tool__link ">
-              <div class="upload-tool__fileName">
-                  ${buttonIcon}
+        const reader = new FileReader();
+
+        this.nodes.imageContainer.innerHTML = `
+        <a class="upload-tool__link upload-tool__link--loading" href="${url}" download="${name.replace(/\\.[^/.]+$/, "")}">
+                <div class="upload-tool__fileName">
+                 ${buttonIcon}
                   ${name}
-              </div>
-            </div>
+                </div>
+            <div class="upload-tool__fileSize"></div>
         </a>`
-  }
 
-  /**
-   * Shows caption input
-   * @param {string} text - caption text
-   */
-  fillCaption(text) {
-    if (this.nodes.caption) {
-      this.nodes.caption.innerHTML = text;
+        this.toggleStatus(Ui.status.FILLED);
     }
-  }
 
-  /**
-   * Changes UI status
-   * @param {string} status - see {@link Ui.status} constants
-   */
-  toggleStatus(status) {
-    for (const statusType in Ui.status) {
-      if (Ui.status.hasOwnProperty(statusType)) {
-        this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${Ui.status[statusType]}`, status === Ui.status[statusType]);
-      }
+    /**
+     * Shows caption input
+     * @param {string} text - caption text
+     */
+    fillCaption(text) {
+        if (this.nodes.caption) {
+            this.nodes.caption.innerHTML = text;
+        }
     }
-  }
 
-  /**
-   * Apply visual representation of activated tune
-   * @param {string} tuneName - one of available tunes {@link Tunes.tunes}
-   * @param {boolean} status - true for enable, false for disable
-   */
-  applyTune(tuneName, status) {
-    this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${tuneName}`, status);
-  }
+    /**
+     * Changes UI status
+     * @param {string} status - see {@link Ui.status} constants
+     */
+    toggleStatus(status) {
+        for (const statusType in Ui.status) {
+            if (Ui.status.hasOwnProperty(statusType)) {
+                this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${Ui.status[statusType]}`, status === Ui.status[statusType]);
+            }
+        }
+    }
 
-  formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes';
+    /**
+     * Apply visual representation of activated tune
+     * @param {string} tuneName - one of available tunes {@link Tunes.tunes}
+     * @param {boolean} status - true for enable, false for disable
+     */
+    applyTune(tuneName, status) {
+        this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${tuneName}`, status);
+    }
 
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-  }
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
 }
 
 /**
@@ -218,17 +220,17 @@ export default class Ui {
  */
 
 export const make = function make(tagName, classNames = null, attributes = {}) {
-  const el = document.createElement(tagName);
+    const el = document.createElement(tagName);
 
-  if (Array.isArray(classNames)) {
-    el.classList.add(...classNames);
-  } else if (classNames) {
-    el.classList.add(classNames);
-  }
+    if (Array.isArray(classNames)) {
+        el.classList.add(...classNames);
+    } else if (classNames) {
+        el.classList.add(classNames);
+    }
 
-  for (const attrName in attributes) {
-    el[attrName] = attributes[attrName];
-  }
+    for (const attrName in attributes) {
+        el[attrName] = attributes[attrName];
+    }
 
-  return el;
+    return el;
 };

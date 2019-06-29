@@ -25,7 +25,6 @@ export default class Uploader {
      */
     uploadSelectedFile({onPreview}) {
         const preparePreview = function (file) {
-            console.log(file);
             onPreview(file);
         };
 
