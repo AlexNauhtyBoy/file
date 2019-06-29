@@ -12,13 +12,13 @@ export default class Ui {
    * @param {ImageConfig} config - user config
    * @param {function} onSelectFile - callback for clicks on Select file buttor
    */
-  constructor({ api, config, onSelectFile }) {
+  constructor({api, config, onSelectFile}) {
     this.api = api;
     this.config = config;
     this.onSelectFile = onSelectFile;
     this.nodes = {
       wrapper: make('div', [this.CSS.baseClass, this.CSS.wrapper]),
-      imageContainer: make('div', [ this.CSS.imageContainer ]),
+      imageContainer: make('div', [this.CSS.imageContainer]),
       fileButton: this.createFileButton(),
       imageEl: undefined,
       imagePreloader: make('div', this.CSS.imagePreloader),
@@ -100,7 +100,7 @@ export default class Ui {
    * @return {Element}
    */
   createFileButton() {
-    const button = make('div', [ this.CSS.button ]);
+    const button = make('div', [this.CSS.button]);
 
     button.innerHTML = this.config.buttonContent || `<div class="cdx-button__icon">${buttonIcon}</div> <div>Select a file</div>`;
 
@@ -116,18 +116,18 @@ export default class Ui {
    * @param {string} src - preview source
    */
   showPreloader(src) {
-      const button = make('div', [ this.CSS.button ]);
+    const button = make('div', [this.CSS.button]);
 
-      this.nodes.imagePreloader.innerHTML = `
-        <div class="uploade-tool__link uploade-tool__link--loading">
-            <div class="uploade-tool__fileName">
+    this.nodes.imagePreloader.innerHTML = `
+        <div class="upload-tool__link upload-tool__link--loading">
+        <div class="progressFill load"></div>
+            <div class="upload-tool__fileName">
                 ${buttonIcon}
                 ${src.name}
             </div>
-            <div class="uploade-tool__fileSize">${this.formatBytes(src.size)}</div>
+            <div class="upload-tool__fileSize">${this.formatBytes(src.size)}</div>
 
         </div>`;
-
     this.toggleStatus(Ui.status.UPLOADING);
   }
 
@@ -135,7 +135,10 @@ export default class Ui {
    * Hide uploading preloader
    */
   hidePreloader() {
-    // this.nodes.imagePreloader.innerHTML = ``;
+    this.nodes.imagePreloader.classList.add('stop')
+    setTimeout(() => {
+      this.nodes.imagePreloader.innerHTML = ``;
+    }, 100)
     this.toggleStatus(Ui.status.EMPTY);
   }
 
@@ -144,13 +147,11 @@ export default class Ui {
    * @param {string} url
    */
   fillImage(url) {
-      console.log(url, 7777);
+    const code = url.match(/[[0-9]{10,25}]/);
 
-      const code = url.match(/[[0-9]{10,25}]/);
+    const name = url.slice(code.index + code[0].length);
 
-      const name = url.slice(code.index + code[0].length);
-
-      const reader = new FileReader();
+    const reader = new FileReader();
 
     this.nodes.imageContainer.innerHTML = `
         <a href="${url}" download="${name.replace(/\.[^/.]+$/, "")}">
@@ -193,17 +194,18 @@ export default class Ui {
   applyTune(tuneName, status) {
     this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${tuneName}`, status);
   }
+
   formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes';
 
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    }
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
 }
 
 /**
