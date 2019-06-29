@@ -58,11 +58,11 @@ export default class Ui {
       /**
        * Tool's classes
        */
-      wrapper: 'uploader-tool',
-      imageContainer: 'uploader-tool__image',
-      imagePreloader: 'uploader-tool__uploader-preloader',
-      imageEl: 'uploader-tool__uploader-picture',
-      caption: 'uploader-tool__caption'
+      wrapper: 'image-tool',
+      imageContainer: 'image-tool__image',
+      imagePreloader: 'image-tool__image-preloader',
+      imageEl: 'image-tool__image-picture',
+      caption: 'image-tool__caption'
     };
   };
 
@@ -116,7 +116,17 @@ export default class Ui {
    * @param {string} src - preview source
    */
   showPreloader(src) {
-    this.nodes.imagePreloader.style.backgroundImage = `url(${src})`;
+      const button = make('div', [ this.CSS.button ]);
+
+      this.nodes.imagePreloader.innerHTML = `
+        <div class="uploade-tool__link uploade-tool__link--loading">
+            <div class="uploade-tool__fileName">
+                ${buttonIcon}
+                ${src.name}
+            </div>
+            <div class="uploade-tool__fileSize">${this.formatBytes(src.size)}</div>
+
+        </div>`;
 
     this.toggleStatus(Ui.status.UPLOADING);
   }
@@ -125,7 +135,7 @@ export default class Ui {
    * Hide uploading preloader
    */
   hidePreloader() {
-    this.nodes.imagePreloader.style.backgroundImage = '';
+    // this.nodes.imagePreloader.innerHTML = ``;
     this.toggleStatus(Ui.status.EMPTY);
   }
 
@@ -134,6 +144,7 @@ export default class Ui {
    * @param {string} url
    */
   fillImage(url) {
+      console.log(url, 7777);
     /**
      * Check for a source extension to compose element correctly: video tag for mp4, img — for others
      */
@@ -175,21 +186,22 @@ export default class Ui {
      * Compose tag with defined attributes
      * @type {Element}
      */
-    this.nodes.imageEl = make(tag, this.CSS.imageEl, attributes);
+    // this.nodes.imageEl = make(tag, this.CSS.imageEl, attributes);
+    this.nodes.imageEl = `<div>123321</div>`;
 
     /**
      * Add load event listener
      */
-    this.nodes.imageEl.addEventListener(eventName, () => {
-      this.toggleStatus(Ui.status.FILLED);
-
-      /**
-       * Preloader does not exists on first rendering with presaved data
-       */
-      if (this.nodes.imagePreloader) {
-        this.nodes.imagePreloader.style.backgroundImage = '';
-      }
-    });
+    // this.nodes.imageEl.addEventListener(eventName, () => {
+    //   this.toggleStatus(Ui.status.FILLED);
+    //
+    //   /**
+    //    * Preloader does not exists on first rendering with presaved data
+    //    */
+    //   if (this.nodes.imagePreloader) {
+    //     this.nodes.imagePreloader.style.backgroundImage = '';
+    //   }
+    // });
 
     this.nodes.imageContainer.appendChild(this.nodes.imageEl);
   }
@@ -224,6 +236,17 @@ export default class Ui {
   applyTune(tuneName, status) {
     this.nodes.wrapper.classList.toggle(`${this.CSS.wrapper}--${tuneName}`, status);
   }
+  formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
 }
 
 /**
@@ -234,6 +257,7 @@ export default class Ui {
  * @param  {Object} attributes        - any attributes
  * @return {Element}
  */
+
 export const make = function make(tagName, classNames = null, attributes = {}) {
   const el = document.createElement(tagName);
 

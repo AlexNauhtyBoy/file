@@ -272,6 +272,7 @@ export default class File {
    * @param {ImageToolData} data
    */
   set data(data) {
+    console.log(this.image, 123);
     this.image = data.file;
 
     this._data.caption = data.caption || '';
