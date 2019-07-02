@@ -89,7 +89,7 @@ export default class Ui {
         if (!toolData.file || Object.keys(toolData.file).length === 0) {
             this.toggleStatus(Ui.status.EMPTY);
         } else {
-            this.toggleStatus(Ui.status.UPLOADING);
+            this.toggleStatus(Ui.status.FILLED);
         }
 
         return this.nodes.wrapper;
@@ -130,7 +130,7 @@ export default class Ui {
         </div>`;
          setTimeout(() => {
              this.nodes.imagePreloader.classList.add('stop')
-         }, 1300)
+         }, 2500)
         this.toggleStatus(Ui.status.UPLOADING);
     }
 
