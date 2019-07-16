@@ -96,8 +96,6 @@ export default class File {
   constructor({ data, config, api }) {
     this.api = api;
 
-    console.log(config);
-
     /**
      * Tool's initial config
      */
@@ -205,7 +203,7 @@ export default class File {
       /**
        * Paste HTML into Editor
        */
-      tags: [ 'img' ],
+      tags: [ 'TEST' ],
 
       /**
        * Paste URL of image into the Editor
@@ -272,7 +270,6 @@ export default class File {
    * @param {ImageToolData} data
    */
   set data(data) {
-    console.log(this.image, 123);
     this.image = data.file;
 
     this._data.caption = data.caption || '';
@@ -316,7 +313,6 @@ export default class File {
    * @param {UploadResponseFormat} response
    */
   onUpload(response) {
-    console.log(response);
     if (response.success && response.file) {
       this.image = response.file;
     } else {
