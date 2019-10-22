@@ -203,20 +203,20 @@ export default class File {
       /**
        * Paste HTML into Editor
        */
-      tags: [ 'TEST' ],
+      tags: ['TEST'],
 
       /**
        * Paste URL of image into the Editor
        */
-      patterns: {
-        image: /https?:\/\/\S+\.(gif|jpe?g|tiff|png)$/i
-      },
+      // patterns: {
+      //   image: /https?:\/\/\S+\.(gif|jpe?g|tiff|png)$/i
+      // },
 
       /**
        * Drag n drop file from into the Editor
        */
       files: {
-        mimeTypes: [ 'image/*' ]
+        mimeTypes: [ 'image/*', 'file/*' ]
       }
     };
   }
@@ -230,18 +230,19 @@ export default class File {
   async onPaste(event) {
     switch (event.type) {
       case 'tag':
-        const image = event.detail.data;
+        const image = event.detail.data.attributes[0].value;
 
         /** Images from PDF */
-        if (/^blob:/.test(image.src)) {
-          const response = await fetch(image.src);
-          const file = await response.blob();
-
-          this.uploadFile(file);
-          break;
-        }
-
-        this.uploadUrl(image.src);
+        // if (/^blob:/.test(image)) {
+        //   const response = await fetch(image);
+        //   const file = await response.blob();
+        //
+        //   console.log('!!!!!!!!!!!!!   ', response, file)
+        //
+        //   this.uploadFile(file);
+        //   break;
+        // }
+        this.uploadUrl(image);
         break;
 
       case 'pattern':
