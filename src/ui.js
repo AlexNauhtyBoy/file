@@ -22,6 +22,7 @@ export default class Ui {
             fileButton: this.createFileButton(),
             imageEl: undefined,
             imagePreloader: make('div', this.CSS.imagePreloader),
+            input: make('input', ['file-tool__input']),
             caption: make('div', [this.CSS.input, this.CSS.caption], {
                 contentEditable: true
             })
@@ -42,6 +43,7 @@ export default class Ui {
         this.nodes.wrapper.appendChild(this.nodes.imageContainer);
         // this.nodes.wrapper.appendChild(this.nodes.caption);
         this.nodes.wrapper.appendChild(this.nodes.fileButton);
+        this.nodes.wrapper.appendChild(this.nodes.input);
     }
 
     /**
