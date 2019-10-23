@@ -1,3 +1,10 @@
+.uploader-tool {
+  &__input {
+    opacity: 0;
+    pointer-events: none;
+     }
+}
+
 .uploade-tool {
   --bg-color: #CDD1E0;
   --front-color: #388AE5;

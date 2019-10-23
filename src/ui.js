@@ -22,7 +22,7 @@ export default class Ui {
             fileButton: this.createFileButton(),
             imageEl: undefined,
             imagePreloader: make('div', this.CSS.imagePreloader),
-            input: make('input', ['file-tool__input']),
+            input: make('input', ['uploade-tool__input']),
             caption: make('div', [this.CSS.input, this.CSS.caption], {
                 contentEditable: true
             })
@@ -54,7 +54,7 @@ export default class Ui {
         return {
             baseClass: this.api.styles.block,
             loading: this.api.styles.loader,
-            input: this.api.styles.input,
+            input: 'uploade-tool__input',
             button: this.api.styles.button,
 
             /**
