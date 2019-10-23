@@ -87,24 +87,42 @@ export default class Uploader {
                 console.warn('Custom uploader method uploadByUrl should return a Promise');
             }
         } else {
-            /**
-             * Default uploading
-             */
-            upload = ajax.post({
-                url: this.config.endpoints.byUrl,
-                data: Object.assign({
-                    url: url
-                }, this.config.additionalRequestData),
-                type: ajax.contentType.JSON,
-                headers: this.config.additionalRequestHeaders
-            }).then(response => response.body);
-        }
 
-        upload.then((response) => {
-            this.onUpload(response);
-        }).catch((error) => {
-            this.onError(error);
-        });
+            const formData = new FormData();
+            const URL = url;
+            let x;
+            const urlName = /.com(.+)/.exec(url)[1].replace('/', '');
+
+            this.urlToFile(url, urlName, 'text/plain')
+                .then((file) => {
+                    upload = this.config.uploader.uploadByFile(file);
+                    upload.then((response) => {
+                        this.onUpload(response);
+                    }).catch((error) => {
+                        this.onError(error);
+                    });
+                });
+
+            // const request = new XMLHttpRequest();
+            // request.responseType = "blob";
+            // request.onload = () => {
+            //     const reader = new FileReader();
+            //     reader.readAsDataURL(request.response);
+            //     reader.onload = (e) => {
+            //         console.log(e.target);
+            //         upload = this.config.uploader.uploadByFile(new File(e.target.result, url));
+            //     };
+            // };
+            // request.open("GET", URL);
+            // request.send();
+        }
+    }
+
+    urlToFile(url, filename, mimeType){
+        return (fetch(url)
+                .then(function(res){return res.arrayBuffer();})
+                .then(function(buf){return new File([buf], filename, {type:mimeType});})
+        );
     }
 
     /**

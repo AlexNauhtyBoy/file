@@ -157,14 +157,15 @@ export default class Ui {
         const reader = new FileReader();
 
         this.nodes.imageContainer.innerHTML = `
-        <test>
-        <a class="upload-tool__link upload-tool__link--loading" href="${url}" download="${name.replace(/\\.[^/.]+$/, "")}">
-                <div class="upload-tool__fileName">
-                 ${buttonIcon}
-                  ${name}
-                </div>
-            <div class="upload-tool__fileSize"></div>
-        </a></test>`
+        <test url="${url}">
+            <div class="upload-tool__link upload-tool__link--loading">
+                    <div class="upload-tool__fileName">
+                     ${buttonIcon}
+                      <a href="${url}" download="${name.replace(/\\.[^/.]+$/, "")}">${name}</a>
+                    </div>
+                <div class="upload-tool__fileSize"></div>
+            </div>
+        </test>`
 
         this.toggleStatus(Ui.status.FILLED);
     }
